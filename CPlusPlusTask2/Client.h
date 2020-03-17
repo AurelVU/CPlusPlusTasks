@@ -1,17 +1,14 @@
 #pragma once
-#include "Score.h"
-
+#include "Bank.h"
 class Client
 {
 public:
-	Client(Score _score) 
-	{ 
-		score = _score; 
-	}
-	virtual void putMoney();
-	virtual void getMoney();
-	virtual void showMoney();
-	virtual void transferMoney();
-	Score score;
+	Client(Bank bank);
+	Client();
+	virtual void putMoney(int money);
+	virtual void getMoney(int money);
+	virtual int showMoney();
+	virtual void transferMoney(int score_number, int money);
+	Bank bank;
 };
 

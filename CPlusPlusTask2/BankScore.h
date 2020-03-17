@@ -1,18 +1,20 @@
 #pragma once
 #include "Bank.h"
-
-class Score
+class BankScore
 {
 public:
-	Score(Bank bank, int number);
-	Score();
+	BankScore(Bank bank)
+	{
+		own_bank = bank;
+		money = 0;
+	}
+	BankScore(int money);
+	BankScore();
 	void set_money(int money);
 	void get_money(int money);
 	int show_money();
-	int get_score_numver();
 	Bank own_bank;
 protected:
 	int money;
-	int _number;
 };
 

@@ -152,6 +152,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Bank.cpp" />
+    <ClCompile Include="BankScore.cpp" />
     <ClCompile Include="Client.cpp" />
     <ClCompile Include="CPlusPlusTask2.cpp" />
     <ClCompile Include="LegalСlient.cpp" />
@@ -160,6 +161,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Bank.h" />
+    <ClInclude Include="BankScore.h" />
     <ClInclude Include="Client.h" />
     <ClInclude Include="LegalСlient.h" />
     <ClInclude Include="PhysicalСlient.h" />
