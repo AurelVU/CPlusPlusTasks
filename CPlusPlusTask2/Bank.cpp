@@ -22,30 +22,46 @@ Bank::Bank(std::string name, int money, double commission)
 	this->commission = commission;
 }
 
-Score Bank::addClient(Client client)
+Score* Bank::addClient(Client* client)
 {
-	Score score(*this, this->users_scores.size());
-	users_scores[client] = score;
-	client.bank = *this;
-	return score;
+	Score score(this, this->users_scores.size());
+	users_scores[client] = &score;
+	client->bank = this;
+	return &score;
 }
 
-int Bank::get_score_number(Client client)
+int Bank::get_score_number(Client* client)
 {
 	this->users_scores[client];
 }
 
-void Bank::transaction(Client client_from, int score_number, int money)
+void Bank::transaction(Client* client_from, int score_number, int money)
 {
-	Score score_from = this->users_scores[client_from];
+	Score* score_from = this->users_scores[client_from];
 	Score score_to;
-	score_from.get_money(money * (1 + this->commission));
+	score_from->get_money(money * (1 + this->commission));
 	this->score.set_money(money * this->commission);
 	score_to.set_money(money);
 }
 
-void Bank::transaction(LegalÑlient client_from, Bank bank_to, int score_number, int money)
+void Bank::transaction(LegalÑlient* client_from, Bank* bank_to, int score_number, int money)
 {
-	Score score_from = users_scores[client_from];
-	bank_to.get_other_bank_transaction(client_from, *this, score_number, money);
+	Score* score_from = users_scores[(Client*)client_from];
+	bank_to->get_other_bank_transaction((LegalÑlient*)client_from, this, score_number, money);
+}
+
+void Bank::get_other_bank_transaction(LegalÑlient* client_from, Bank* bank_from, int score_number, int money)
+{
+	Score* score = getScoreByNymber(score_number);
+	score->set_money(money);
+}
+
+Score* Bank::getScoreByNymber(int number)
+{
+	for (Score* i = users_scores.rbegin; i != nullptr; i++)
+	{
+		if (i->get_score_numver == number)
+			return i;
+	}
+	return nullptr;
 }

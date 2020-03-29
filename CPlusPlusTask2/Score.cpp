@@ -1,6 +1,6 @@
 #include "Score.h"
 
-Score::Score(Bank bank, int number)
+Score::Score(Bank* bank, int number)
 {
 	this->own_bank = bank;
 	this->_number = number;

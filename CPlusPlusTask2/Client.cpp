@@ -1,6 +1,6 @@
 #include "Client.h"
 
-Client::Client(Bank bank)
+Client::Client(Bank* bank)
 {
 	this->bank = bank;
 }

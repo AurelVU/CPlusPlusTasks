@@ -3,7 +3,7 @@
 class BankScore
 {
 public:
-	BankScore(Bank bank)
+	BankScore(Bank* bank)
 	{
 		own_bank = bank;
 		money = 0;
@@ -13,7 +13,7 @@ public:
 	void set_money(int money);
 	void get_money(int money);
 	int show_money();
-	Bank own_bank;
+	Bank* own_bank;
 protected:
 	int money;
 };
