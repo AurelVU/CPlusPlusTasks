@@ -4,6 +4,11 @@ Physical—lient::Physical—lient()
 {
 }
 
+std::string Physical—lient::getDesignation()
+{
+	return this->firstName + " " + this->secondName;
+}
+
 Physical—lient::Physical—lient(std::string firstName, std::string secondName)
 {
 	this->firstName = firstName;
@@ -12,7 +17,7 @@ Physical—lient::Physical—lient(std::string firstName, std::string secondName)
 
 void Physical—lient::putMoney(int money)
 {
-	this->bank
+	
 }
 
 void Physical—lient::getMoney(int money)

@@ -1,6 +1,8 @@
 #pragma once
 #include "Bank.h"
 
+class Bank;
+
 class Score
 {
 public:
