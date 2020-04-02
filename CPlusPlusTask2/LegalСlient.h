@@ -10,7 +10,6 @@ public:
 	Legal—lient();
 	Legal—lient(std::string name_company);
 	string name_company;
-	string getDesignation();
 
 	void putMoney(int money) ;
 	void getMoney(int money) ;

@@ -2,32 +2,36 @@
 
 Bank::Bank()
 {
+	this->score = new BankScore(this);
 }
 
 Bank::Bank(std::string name)
 {
 	this->name = name;
+	this->score = new BankScore(this);
 }
 
 Bank::Bank(std::string name, int money)
 {
 	this->name = name;
 	this->score = new BankScore(money);
+	this->score->own_bank = this;
 }
 
 Bank::Bank(std::string name, int money, double commission)
 {
 	this->name = name;
 	this->score = new BankScore(money);
+	this->score->own_bank = this;
 	this->commission = commission;
 }
 
 Score* Bank::addClient(Client* client)
 {
-	Score score(this, this->users_scores.size());
-	users_scores[client] = &score;
+	Score* score = new Score(this, this->users_scores.size());
+	users_scores[client] = score;
 	client->bank = this;
-	return &score;
+	return score;
 }
 
 int Bank::get_score_number(Client* client)

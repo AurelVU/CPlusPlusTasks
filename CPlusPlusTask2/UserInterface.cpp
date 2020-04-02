@@ -15,8 +15,10 @@ ostream& operator<<(std::ostream& os, Score& score)
 ostream& operator<<(std::ostream& os, Client& client)
 {
     os << "Клиент: " << client.getDesignation() << "\n";
-    os << "Его счет: ";
-    os << client.bank->get_score_number(&client);
+    if (client.bank != nullptr) {
+        os << "Его счет: ";
+        os << client.bank->get_score_number(&client);
+    }
     return os;
 }
 
@@ -38,12 +40,12 @@ ostream& operator<<(std::ostream& os, LegalСlient& client)
 
 ostream& operator<<(std::ostream& os, Bank& bank) {
     os << "Банк: " << bank.name << '\n';
-    BankScore* score = bank.getBankScore();
+    BankScore score = *bank.getBankScore();
     os << score;
     auto users = bank.getCliendAndScore();
     for (auto row : users)
     {
-        os << row.first << " : " << row.second;
+        os << *row.first << " : " << *row.second;
     }
     return os;
 }
@@ -117,7 +119,7 @@ void UserInterface::startMenuBank()
 {
     bool flag = true;
     while (flag) {
-        cout << "Выберите действие\nСоздать банк: 1\nДобавить клиента в банк: 2\nУстановить деньги в банке: 3\nВыход: 0\n";
+        cout << "Выберите действие\nСоздать банк: 1\nДобавить клиента в банк: 2\nУстановить деньги в банке: 3\nОтобразить все банки: 4\nВыход: 0\n";
         int command = getValue<int>();
         switch (command)
         {
@@ -130,8 +132,12 @@ void UserInterface::startMenuBank()
         case 3:
             setMoneyToBank();
             break;
+        case 4:
+            showAllBanks();
+            break;
         case 0:
             flag = false;
+            system("cls");
             break;
         default:
             break;
@@ -146,7 +152,7 @@ void UserInterface::addClientToBank()
     string bankname = "";
     cin >> bankname;
     cout << "Если клиент физический: 1, если частный: 2: ";
-    cout << "Чтобы выйти, введите 0";
+    cout << "Чтобы выйти, введите 0: ";
     key = getValue<int>();
     switch (key)
     {
@@ -171,6 +177,7 @@ void UserInterface::addClientToBank()
         break; 
     }
     case 0:
+        system("cls");
         return;
         break;
     default:
@@ -180,7 +187,35 @@ void UserInterface::addClientToBank()
 
 void UserInterface::startMenuClient()
 {
-
+    bool flag = true;
+    while (flag) {
+        cout << "Выберите действие\nСоздать клиента: 1\nДобавить деньги на счет клиента: 2\nСнять деньги со счета клиента: 3\nПеревести деньги на другой счет: 4\nОтобразить всех клиентов: 5\nВыход: 0\n";
+        int command = getValue<int>();
+        switch (command)
+        {
+        case 1:
+            addClient();
+            break;
+        case 2:
+            setMoneyToClient();
+            break;
+        case 3:
+            getMoneyFromClient();
+            break;
+        case 4:
+            makeTransaction();
+            break;
+        case 5:
+            showAllClients();
+            break;
+        case 0:
+            flag = false;
+            system("cls");
+            break;
+        default:
+            break;
+        }
+    }
 }
 
 void UserInterface::setMoneyToBank()
@@ -247,4 +282,95 @@ void UserInterface::getMoneyFromClient()
         int money = getValue<int>();
         pc->getMoney(money);
     }
+}
+
+void UserInterface::makeTransaction()
+{
+    int key = -1;
+    cout << "1 - Физический клиент, 2 - Юридический клиент: ";
+    key = getValue<int>();
+    while (key != 1 && key != 2)
+        key = getValue<int>();
+    if (key == 1)
+    {
+        cout << "Введите имя: ";
+        string firstname = getValue<string>();
+        cout << "Введите фамилию: ";
+        string secondname = getValue<string>();
+        PhysicalСlient* pc = getPhysicalClient(firstname, secondname);
+        cout << "Введите количетсво денег: ";
+        int money = getValue<int>();
+        cout << "Введите номер счета: ";
+        int number;
+        cin >> number;
+        pc->transferMoney(number, money);
+    }
+    else if (key == 2)
+    {
+        cout << "Введите название компании: ";
+        string name = getValue<string>();
+        LegalСlient* pc = getLegalClient(name);
+        cout << "Введите количетсво денег: ";
+        int money = getValue<int>();
+        cout << "Введите номер счета: ";
+        int number;
+        number = getValue<int>();
+        cout << "Перевести в другой банк? 1 - да, 2 - нет: ";
+        key = getValue<int>();
+        while (key != 1 && key != 2)
+            key = getValue<int>();
+        if (key == 1)
+        {
+            string name;
+            cout << "Введите название банка: ";
+            name = getValue<string>();
+            Bank* bank = getBank(name);
+            pc->transferMoney(bank, number, money);
+        }
+        else
+            pc->transferMoney(number, money);
+    }
+}
+
+void UserInterface::showAllClients()
+{
+    for (Client* client : this->clients)
+        cout << *client;
+}
+
+void UserInterface::addClient()
+{
+    int key = -1;
+    cout << "1 - Физический клиент, 2 - Юридический клиент: ";
+    key = getValue<int>();
+    while (key != 1 && key != 2)
+        key = getValue<int>();
+    if (key == 1)
+        addPhysicalClient();
+    else if (key == 2)
+        addLegalClient();
+}
+
+Bank* UserInterface::getBank(string name)
+{
+    for (Bank* bank : this->banks)
+        if (bank->name == name)
+            return bank;
+    return nullptr;
+}
+
+PhysicalСlient* UserInterface::getPhysicalClient(string firstname, string secondname)
+{
+    for (Client* client : clients)
+        if (client->getDesignation() == firstname + " " + secondname)
+            return (PhysicalСlient*)client;
+	return nullptr;
+}
+
+LegalСlient* UserInterface::getLegalClient(string name)
+{
+    for (Client* client : clients)
+        if (client->getDesignation() == name)
+            return (LegalСlient*)client;
+	return nullptr;
 }

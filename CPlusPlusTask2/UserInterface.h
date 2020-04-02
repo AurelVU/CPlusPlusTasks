@@ -7,6 +7,7 @@
 #include "Physical—lient.h"
 #include "Score.h"
 #include <vector>
+#include <stdlib.h>
 
 using namespace std;
 
@@ -25,6 +26,8 @@ public:
 	void setMoneyToClient();
 	void getMoneyFromClient();
 	void makeTransaction();
+	void showAllClients();
+	void addClient();
 private:
 	template <typename T>
 	T getValue();

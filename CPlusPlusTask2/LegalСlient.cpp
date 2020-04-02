@@ -2,6 +2,8 @@
 
 LegalÑlient::LegalÑlient()
 {
+	this->bank = nullptr;
+	this->name_company = "";
 }
 
 LegalÑlient::LegalÑlient(std::string name_company)
@@ -16,6 +18,7 @@ std::string LegalÑlient::getDesignation()
 
 void LegalÑlient::transferMoney(int score_number, int money)
 {
+	bank->transaction(this, score_number, money);
 }
 
 void LegalÑlient::transferMoney(Bank* other_bank, int score_number, int money)
@@ -25,13 +28,15 @@ void LegalÑlient::transferMoney(Bank* other_bank, int score_number, int money)
 
 void LegalÑlient::putMoney(int money)
 {
+	this->bank->get_score(this)->set_money(money);
 }
 
 void LegalÑlient::getMoney(int money)
 {
+	this->bank->get_score(this)->get_money(money);
 }
 
 int LegalÑlient::showMoney()
 {
-	return 0;
+	return this->bank->get_score(this)->show_money();
 }

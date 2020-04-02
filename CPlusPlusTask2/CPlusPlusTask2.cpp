@@ -2,10 +2,13 @@
 //
 
 #include <iostream>
+#include "UserInterface.h"
 
 int main()
 {
-    std::cout << "Hello World!\n";
+	setlocale(LC_ALL, "Russian");
+	UserInterface* ui = new UserInterface();
+	ui->startMenu();
 }
 
 // Запуск программы: CTRL+F5 или меню "Отладка" > "Запуск без отладки"
