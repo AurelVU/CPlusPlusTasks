@@ -120,27 +120,34 @@ void UserInterface::startMenuBank()
     bool flag = true;
     while (flag) {
         cout << "Выберите действие\nСоздать банк: 1\nДобавить клиента в банк: 2\nУстановить деньги в банке: 3\nОтобразить все банки: 4\nВыход: 0\n";
-        int command = getValue<int>();
-        switch (command)
+        try
         {
-        case 1:
-            addBank();
-            break;
-        case 2:
-            addClientToBank();
-            break;
-        case 3:
-            setMoneyToBank();
-            break;
-        case 4:
-            showAllBanks();
-            break;
-        case 0:
-            flag = false;
-            system("cls");
-            break;
-        default:
-            break;
+            int command = getValue<int>();
+            switch (command)
+            {
+            case 1:
+                addBank();
+                break;
+            case 2:
+                addClientToBank();
+                break;
+            case 3:
+                setMoneyToBank();
+                break;
+            case 4:
+                showAllBanks();
+                break;
+            case 0:
+                flag = false;
+                system("cls");
+                break;
+            default:
+                break;
+            }
+        }
+        catch (const char* msg)
+        {
+            cout << msg << endl;
         }
     }
 }
@@ -215,6 +222,7 @@ void UserInterface::startMenuClient()
         default:
             break;
         }
+
     }
 }
 
@@ -356,7 +364,7 @@ Bank* UserInterface::getBank(string name)
     for (Bank* bank : this->banks)
         if (bank->name == name)
             return bank;
-    return nullptr;
+    throw "Банк с таким названием отсутствует";
 }
 
 PhysicalСlient* UserInterface::getPhysicalClient(string firstname, string secondname)
@@ -364,7 +372,7 @@ PhysicalСlient* UserInterface::getPhysicalClient(string firstname, string second
     for (Client* client : clients)
         if (client->getDesignation() == firstname + " " + secondname)
             return (PhysicalСlient*)client;
-	return nullptr;
+    throw "Клиент с данной фамилией и именем отсутствует";
 }
 
 LegalСlient* UserInterface::getLegalClient(string name)
@@ -372,5 +380,5 @@ LegalСlient* UserInterface::getLegalClient(string name)
     for (Client* client : clients)
         if (client->getDesignation() == name)
             return (LegalСlient*)client;
-	return nullptr;
+    throw "Фирма с таким названием отсутствует";
 }

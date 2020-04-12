@@ -17,6 +17,8 @@ void Score::set_money(int money)
 
 void Score::get_money(int money)
 {
+	if (this->money < money)
+		throw "Недостаточно денег";
 	this->money -= money;
 }
 

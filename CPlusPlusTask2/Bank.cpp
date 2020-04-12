@@ -36,11 +36,15 @@ Score* Bank::addClient(Client* client)
 
 int Bank::get_score_number(Client* client)
 {
+	if (this->users_scores.find(client) == this->users_scores.end())
+		throw "ƒанный клиент отсутствует в этом банке";
 	return this->users_scores[client]->get_score_numver();
 }
 
 Score* Bank::get_score(Client* client)
 {
+	if (this->users_scores.find(client) == this->users_scores.end())
+		throw "ƒанный клиент отсутствует в этом банке";
 	return this->users_scores[client];
 }
 
@@ -49,21 +53,27 @@ Client* Bank::get_client_by_score_number(int number)
 	for (auto row : this->users_scores)
 		if (row.second->get_score_numver() == number)
 			return row.first;
-	return nullptr;
+	throw "—чет с таким номером отсутствует";
 }
 
 void Bank::transaction(Client* client_from, int score_number, int money)
 {
+	if (this->users_scores.find(client_from) == this->users_scores.end())
+		throw "ƒанный клиент отсутствует в этом банке";
 	Score* score_from = this->users_scores[client_from];
-	Score score_to;
+	Score* score_to = this->getScoreByNymber(score_number);
 	score_from->get_money(money * (1 + this->commission));
 	this->score->set_money(money * this->commission);
-	score_to.set_money(money);
+	score_to->set_money(money);
 }
 
 void Bank::transaction_to_other_bank(Client* client_from, Bank* bank_to, int score_number, int money)
 {
+	if (this->users_scores.find(client_from) == this->users_scores.end())
+		throw "ƒанный клиент отсутствует в этом банке";
 	Score* score_from = users_scores[(Client*)client_from];
+	score_from->get_money(money * (1 + this->commission));
+	this->score->set_money(money * this->commission);
 	bank_to->get_other_bank_transaction(client_from, this, score_number, money);
 }
 
@@ -91,5 +101,5 @@ Score* Bank::getScoreByNymber(int number)
 		if (i->get_score_numver() == number)
 			return i;
 	}
-	return nullptr;
+	throw "—чет с данным номером отсутствует";
 }

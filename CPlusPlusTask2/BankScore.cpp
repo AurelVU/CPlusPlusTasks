@@ -16,6 +16,8 @@ void BankScore::set_money(int money)
 
 void BankScore::get_money(int money)
 {
+	if (this->money < money)
+		throw "Денег на счету банка недостаточно";
 	this->money -= money;
 }
 
